@@ -2,48 +2,43 @@
 Function for validating the Game is Stalemate, Winner or no Winner Yet!
  */
 var ai = require("./AIPlayer.js");
-function getGame(gameRegistrar, gameId) {
-    for (var i = 0; i < gameRegistrar.length; i++) {
-        if (gameRegistrar[i].id == gameId) {
-            return gameRegistrar[i];
-        }
+// Get game in game list
 
-    }
-    console.error("Error: No Game Found for " + gameId );
+function getItemFromList(list, itemId) {
+    for (var i = 0; i < list.length; i++)
+        if (list[i].id == itemId) return list[i];
     return null;
 }
-//Checks if a player is in a Game Room
-
-function playerInRoom(roomID,socket) {
-    var check=false;
-    socket.rooms.forEach (function(room) {
-        if (room === roomID) return check=true;
-    });
-    return check;
+function getGame(gameRegistrar, gameId) {
+    game = getItemFromList(gameRegistrar, gameId);
+    if (game == null) console.error("Error: No Game Found for " + gameId );
+    return game;
 }
-//Extract User Game details from Cookie
-function extractParams(cookieParams,socketId) {
-    //console.log(cookieParams);
-    var gameParams;
-    if (cookieParams === "") {
-        return {
-            userName:socketId,
-            sessId:socketId,
-            wins:0,
-            losses:0,
-            stalemates:0
+//Gets a Player by Player.id
+function getPlayer(playerList, playerId) {
+    player = getItemFromList(playerList, playerId);
+    if (player == null) console.error("Error: No Player Found for " + playerId);
+    return player;
+}
 
-        };
-    }else {
-        var parseStr = cookieParams.split("|");
-        return {
-            userName:parseStr[0],
-            sessId:parseStr[1],
-            wins:parseStr[2],
-            losses:parseStr[3],
-            stalemates:parseStr[4]
-        };
+//Checks if a player is in a Game Room
+function playerInRoom(roomID, socket) {
+    var rooms = socket.rooms;
+    for (var i = 0; i < rooms.length; i++) 
+        if (rooms[i] === roomID) return true;
+    return false;
+}
+
+//Extract User Game details from Cookie
+function assignCookieParams(userName, sessId, wins, losses, stalemates) {
+    return {
+        userName: userName,  sessId:sessId,  wins:wins,  losses:losses,  stalemates:stalemates
     }
+}
+function extractParams(cookieParamStr, socketId) {
+    if (cookieParamStr === "") return extractParams(socketId, socketId, 0, 0, 0);
+    var params = cookieParamStr.split("|");
+    return assignCookieParams(params[0], params[1], params[2], params[3], params[4]);
 }
 //Gets cookie data from Request and returns Cookie with name
 function getCookieValue(request,cookie) {
@@ -59,15 +54,6 @@ function getCookieValue(request,cookie) {
     });
 
     return match;
-}
-//Gets a Player by Player.id
-function getPlayer(playerList, playerId) {
-    for (var i = 0; i < playerList.length; ++i) {
-        if (playerList[i].id==playerId) {
-           return playerList[i];
-        }
-    }
-    console.error("Error: No Player Found for " + playerId);
 }
 
 //Removes any Games with Player.id.  Used when a Player exits.
@@ -87,14 +73,13 @@ function computerMove(gameRegistrar,io, gamePlaying,delay) {
 
     var player = gamePlaying.currentPlayer;
 
-    var scores= ai.scoreBoard(gamePlaying.board,player.id);
-    var maxScore =0;
-    var r_move=0;
-    var c_move=0;
-    var scoreHold=new Array();
+    var scores = ai.scoreBoard(gamePlaying.board,player.id);
+    var maxScore = 0;
+    var r_move = 0, c_move=0;
+    var scoreHold = new Array();
     for (var r=0;r<3;r++){
         for (var c=0;c<3;c++) {
-            if (maxScore==scores[r][c]){
+            if (maxScore == scores[r][c]){
                 scoreHold.push({r:r,c:c,score:scores[r][c]});
             }else if (maxScore<scores[r][c]) {
                 scoreHold=new Array();
@@ -103,7 +88,7 @@ function computerMove(gameRegistrar,io, gamePlaying,delay) {
             }
         }
     }
-
+    // Score hold
     if (scoreHold.length>1) {
        var select= Math.floor(Math.random() * scoreHold.length-1) + 1;
        r_move=scoreHold[select].r;
@@ -113,11 +98,11 @@ function computerMove(gameRegistrar,io, gamePlaying,delay) {
         r_move=scoreHold[0].r;
         c_move=scoreHold[0].c;
     }
+    // Update score
     gamePlaying.aiscore=scores;
     gamePlaying.completeTurn(player,[r_move,c_move]);
-
+    // Is end
     if (gamePlaying.isStalemate()) {
-
         io.in(gamePlaying.playerX.id).emit('stale_mate',gamePlaying);
         io.in(gamePlaying.playerX.id).emit('game_message',{message:"Stale Mate!"});
         getGame(gameRegistrar,gamePlaying.id).endGame(io, gameRegistrar);
@@ -133,7 +118,6 @@ function computerMove(gameRegistrar,io, gamePlaying,delay) {
         io.in(gamePlaying.playerX.id).emit('turn_played',gamePlaying);
     }
 }
-
 
 module.exports.getPlayer = getPlayer;
 module.exports.getGame = getGame;

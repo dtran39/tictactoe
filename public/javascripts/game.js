@@ -1,21 +1,10 @@
 function Player(clientId,userName,wins,losses,stalemate,state,ai) {
-
-        this.id = clientId;
-        this.state=state;
-        if (userName !== undefined) {
-            this.playerName=userName;
-        } else
-        {
-            this.playerName=this.id;
-        }
-        this.wins=wins;
-        this.losses=losses;
-        this.stalemate=stalemate;
-       // this.icon=playerIcon;
-        this.computerai=ai;
-        return this;
+        var obj = {id: clientId, state: state, computerai: ai,
+                    wins: wins, losses: losses, stalemate: stalemate};
+        obj.playerName = (userName === undefined) ? obj.id : userName;
+        return obj;
 }
-
+    
 function Game(playerList,id) {
     playerList.requester.icon="X";      this.playerX=playerList.requester;
     playerList.requestee.icon="O";      this.playerO= playerList.requestee;
@@ -29,11 +18,10 @@ function Game(playerList,id) {
     this.aiscore=[[0,0,0],[0,0,0],[0,0,0]];
     this.stats={x:{wins:0,losses:0,stale:0},o:{wins:0,losses:0,stale:0}};
     this.live=true;
-
     return this;
 }
 
-var startGame = function(io){
+Game.prototype.startGame = function(io){
     this.players.forEach(function(player) {
         player.state="playing";
         io.emit('player_update',player);
@@ -42,18 +30,19 @@ var startGame = function(io){
     io.in(this.playerX.id).emit('game_message',{message:"Game Started, You go First"});
     io.in(this.playerO.id).emit('game_message',{message:"Game Started, Other Player Thinking"});
 }
-var endGame = function(io, gameRegistrar) {
+
+Game.prototype.endGame = function(io, gameRegistrar) {
     this.players.forEach(function(player) {
         if (!player.computerai) {
             player.state="new";
             io.emit('player_update',player);
         }
-
     });
 
     this.cleanGame(gameRegistrar);
 }
-var cleanGame = function(gameRegistrar){
+
+Game.prototype.cleanGame = function(gameRegistrar){
     for (var i=0;i<gameRegistrar.length;i++) {
         if (gameRegistrar[i].gameId==this.gameId){
             gameRegistrar.splice(i,1);
@@ -61,9 +50,9 @@ var cleanGame = function(gameRegistrar){
         }
     }
 }
-var completeTurn = function(player,location) {
 
-    if (this.currentPlayer===player&&player===this.playerX) {
+Game.prototype.completeTurn = function(player,location) {
+    if (this.currentPlayer === player && player === this.playerX) {
         this.board[location[0]][location[1]]=this.playerX.id;
         this.currentPlayer=this.playerO;
     }else {
@@ -71,22 +60,20 @@ var completeTurn = function(player,location) {
         this.currentPlayer=this.playerX;
     }
 }
-var isStalemate = function() {
 
+Game.prototype.isStalemate = function() {
     if (gameDone(this.board).result=="stalemate") {
         if (this.live) {
             this.stats.x.stale++;
             this.stats.o.stale++;
             this.live=false;
         }
-
         return true;
     }
-
-
     return false;
 }
-var isWinner = function() {
+
+Game.prototype.isWinner = function() {
     var results = gameDone(this.board);
     if (results.result=="winner") {
         if (this.live) {
@@ -107,16 +94,11 @@ var isWinner = function() {
     return false;
 
 };
-var whoWon = function() {
+
+Game.prototype.whoWon = function() {
    if (!this.winner) return null;
    var wonBy = gameDone(this.board).winner;
-   if (wonBy==this.playerX.id) {
-       return this.playerX;
-   }else
-   {
-       return this.playerO;
-   }
-
+   return (wonBy == this.playerX.id) ? this.playerX : this.playerO;
 };
 var gameDone = function (board) {
     //Check for Winner
@@ -177,13 +159,6 @@ var gameDone = function (board) {
 
     return {result:"live",winner:null};
 }
-Game.prototype.startGame = startGame;
-Game.prototype.endGame = endGame;
-Game.prototype.cleanGame = cleanGame;
-Game.prototype.completeTurn = completeTurn;
-Game.prototype.isStalemate = isStalemate;
-Game.prototype.isWinner = isWinner;
-Game.prototype.whoWon = whoWon;
 //
 module.exports.Game = Game;
 module.exports.Player = Player;

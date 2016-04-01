@@ -211,12 +211,10 @@ io.on('connection', function(socket){
 
     //On Disconnect, we remove the Player and Games they are registered in...
     socket.on('disconnect', function(){
-
         var playerDelete;
         cleanGameByPlayer(gameRegistrar,socket.id);
         for (var i=0;i<playerList.length;++i) {
             if (playerList[i].id==socket.id) {
-
                 playerDelete=playerList[i];
                 playerList.splice(i,1);
             }
