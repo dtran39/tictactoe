@@ -1,0 +1,58 @@
+extends layout
+
+block content
+    div.viewBox
+      div.header #{title}
+      div.playerHeader
+          div.playerInfoBox
+                span.playerNameBox
+                    span(id="playerName").basetext
+                span.updateBut
+                    a(id="updateName",href="#").gameButton Update
+          div.playerStatsBox
+                span(alt="Wins").wins wins:
+                  span(id="wins").basetext
+                span.losses losses:
+                  span(id="losses").basetext
+                span.ties ties:
+                    span(id="ties").basetext
+      div(id="messages")
+        div(id="gameMessage").gameMessage
+        a(id='viewButton',href="#").gameButton All Logs
+      div(id='archiveMessageBox')
+          div(id='archiveMessages').gameMessage
+      div.spacer
+      div.gameHeader
+          div.gameActionPanel
+            a(id="playComputer",href="#").gameButton Play Computer |
+            a(id="computerSimulation",href="#").gameButton Computer Simulation
+      div.spacer
+      div.gameIconPanel
+          span.iconView You:
+              span(id="myIcon") X
+          span.iconView Opponent:
+              span(id="oppIcon") O
+          a(id="swapIcons",href="#").gameButton Swap
+      div.gameViewBox
+        div.tictacbox
+            div.row0
+                div(id='row0_0').boxdims
+                div.col2.coldim
+                    div(id='row0_1').colbox
+                    div(id='row0_2').colbox
+            div.row1
+                div(id='row1_0').boxdims
+                div.col2.coldim
+                    div(id='row1_1').colbox
+                    div(id='row1_2').colbox
+            div.row2
+                div(id='row2_0').boxdims
+                div.col2.coldim
+                    div(id='row2_1').colbox
+                    div(id='row2_2').colbox
+      div.menu
+        div.gameList
+            ul(id='availGames').gameText
+        div.instructions
+            div.gameTitle Game Instructions
+            div.gameText Request a Game by selecting an Available Game Request.  Game Requestor is always the X and Opponent is O.

@@ -1,0 +1,464 @@
+@media (max-width: 500px) {
+
+    .viewBox {
+        width:100%;
+    }
+    .gameViewBox {
+        height:300px;
+        width:300px;
+        margin:0px auto;
+        font-size: 5em;
+        display:none;
+
+    }
+
+    .gameIconPanel{
+        display:none;
+    }
+
+    #boardView{
+        display:none;
+    }
+
+    .playerInfoBox{
+        float:left;
+
+    }
+
+    .playerStatsBox {
+        font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+        font-size: .6em;
+        color: darkblue;
+        margin-top:8px;
+        margin-bottom:8px;
+        float:right;
+
+    }
+
+    .playerHeader {
+        width:100%;
+        height:30px;
+
+    }
+
+
+
+    .gameActionPanel{
+
+        width:100%;
+        height:20px;
+
+    }
+
+    .gameIconPanel {
+        width:100%;
+        height:20px;
+    }
+
+}
+
+
+
+@media (min-width: 500px) {
+
+    .viewBox {
+        width:100%;
+    }
+    .gameViewBox {
+        height:500px;
+        width:500px;
+        margin:0px auto;
+        font-size: 8em;
+    }
+
+    .playerInfoBox{
+        float:left;
+
+    }
+
+    .playerStatsBox {
+        font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+        font-size: .6em;
+        color: darkblue;
+        margin-top:8px;
+        margin-bottom:8px;
+        float:right;
+
+    }
+
+    .playerHeader {
+        width:100%;
+        height:30px;
+    }
+
+    .gameActionPanel{
+        float:left;
+        width:50%;
+        height:20px;
+    }
+
+    .gameIconPanel {
+        float:right;
+        width:50%;
+        height:20px;
+    }
+}
+
+@media (min-width: 900px) {
+
+    .viewBox {
+        width:900px;
+        height:100%;
+    }
+
+    .gameViewBox {
+        height:500px;
+        width:500px;
+        float:left;
+        margin:0px auto;
+        font-size: 8em;
+    }
+
+    .menu {
+        height:100%;
+        width:300px;
+        float:right;
+    }
+    .playerInfoBox{
+        float:left;
+        width:50%;
+    }
+
+    .playerStatsBox {
+        font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+        font-size: .6em;
+        color: darkblue;
+        margin-top:8px;
+        margin-bottom:8px;
+        float:right;
+        width:50%;
+    }
+
+    .playerHeader {
+        width:100%;
+        height:30px;
+    }
+}
+
+.spacer {
+    height:10px;
+}
+
+.coldim {
+    height:100%;
+    width:65%;
+}
+
+.colbox {
+    height:100%;
+    width:48%;
+}
+
+.boxdims {
+    height:100%;
+    width:32%;
+}
+
+.playerNameBox {
+    width:100%;
+
+
+}
+
+.wins {
+    padding:5px;
+    margin:5px;
+    border-radius: 25px;
+    background-color: #04B486;
+
+
+}
+.losses {
+    padding:5px;
+    margin:5px;
+    border-radius: 25px;
+    background-color: #FF0000;
+
+}
+.ties {
+    padding:5px;
+    margin:5px;
+    border-radius: 25px;
+    background-color: #A4A4A4;
+
+}
+
+.basetext {
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    color:white;
+    text-align: center;
+    font-size: .7em;
+    /*margin:10px;*/
+
+}
+
+.gameTitle {
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    color:white;
+    text-align: center;
+    padding:5px;
+    margin:5px;
+    border-radius: 25px;
+    background-color: #A4A4A4;
+    font-size: .8em;
+    width:60%;
+}
+
+.iconView{
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    color:white;
+    text-align: center;
+    padding:5px;
+    margin:5px;
+    border-radius: 25px;
+    background-color: #A4A4A4;
+    font-size: .7em;
+
+}
+
+.gameHeader {
+    width:90%;
+    height:10px;
+    margin:5px;
+    padding:5px;
+}
+
+
+#playerName {
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    color:black;
+    margin: 5px;
+    text-align: right;
+}
+
+.updateBut {
+    margin-left: 10px;
+
+}
+
+.gameButton {
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    color:red;
+    font-size: .7em;
+    text-align: center;
+    margin:5px;
+    text-decoration: none;
+}
+
+#updateName {
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    color:red;
+    text-align: center;
+    margin:5px;
+}
+
+.header {
+    font-family:  "Helvetica Nueue", Arial, sans-serif;
+    border: 2px solid;
+    text-align: center;
+    color: white;
+    border-radius: 25px;
+    background-color: #000099;
+
+}
+
+.scoreText {
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+    font-size: .2em;
+    margin: auto;
+
+    color: lightgray;
+}
+
+.gameMessage {
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+    font-size: .7em;
+    color: darkblue;
+
+}
+
+
+
+#messages {
+    width:100%;
+    height:100%;
+    min-height: 10px;
+    margin:5px;
+
+}
+
+
+
+
+#gameMessage {
+    float:left;
+    width:75%;
+    text-align: center;
+    height:15px;
+    padding: 5px;
+    border-radius: 25px;
+    background-color: #A4A4A4;
+}
+
+#viewButton {
+    float:right;
+    width:15%;
+    font-size: .7em;
+    text-align: center;
+    height:20px;
+    padding: 5px;
+    left:5px;
+}
+
+
+
+#archiveMessages {
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+    font-size: .7em;
+    color: darkblue;
+    display:none;
+    width:80%;
+    margin:10px;
+    padding: 10px;
+    border-radius: 25px;
+    background-color: lightgray;
+}
+
+.menu {
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+    font-size: .8em;
+
+
+}
+
+.gameList {
+    background-color: lightgray;
+    border-radius: 25px;
+    background-color: #336699;
+}
+
+.instructions {
+    background-color: lightgray;
+    border-radius: 25px;
+    background-color: #336699;
+}
+
+/*.gameTitle {*/
+    /*font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;*/
+    /*font-size: 1.3em;*/
+    /*color: white;*/
+    /*margin:5px;*/
+    /*text-align: center;*/
+    /*width:200px;*/
+/*}*/
+
+.gameText {
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+    font-size: .9em;
+    color: white;
+    padding:10px;
+
+}
+
+.log {
+    display:none;
+}
+
+.tictacbox {
+
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+
+    text-align: center;
+    height:100%;
+    width:100%;
+
+}
+
+.row0 {
+    border-bottom: groove;
+    width:100%;
+    height:33%;
+}
+
+.row1 {
+    width:100%;
+    height:33%;
+}
+
+.row2 {
+    border-top: groove;
+    width:100%;
+    height:33%;
+
+}
+
+.selecting {
+    background-color: red;
+}
+
+.col2 {
+
+    float:right;
+}
+
+
+#row0_0 {
+    float: left;
+
+}
+
+#row0_1 {
+    float: left;
+    border-left: groove;
+    border-right: groove;
+
+}
+
+#row0_2 {
+    float: right;
+
+}
+
+#row1_0 {
+    float: left;
+
+}
+
+#row1_1 {
+    float: left;
+    border-left: groove;
+    border-right: groove;
+}
+
+#row1_2 {
+    float: right;
+
+}
+
+#row2_0 {
+    float: left;
+
+
+}
+
+#row2_1 {
+    float: left;
+    border-left: groove;
+    border-right: groove;
+
+}
+
+#row2_2 {
+    float: right;
+
+}
