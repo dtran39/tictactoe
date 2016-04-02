@@ -104,25 +104,21 @@ function isOutOfBound(board, row, col) {
     var height = board.length, width = board[0].length;
     return (row < 0) || (row > height - 1) || (col < 0) || (col > width - 1);    
 }
-function hasWonInOneDir(board, row, col, verDir, horDir, connectionLength) {
-        // Go back as long as possible
-    while(!isOutOfBound(board, row - verDir, col - horDir) && board[row - verDir][col - horDir] == board[row][col])
-        row -= verDir; col -= horDir;
-        // Go forward and count
+function hasWonInOneDir(board,row, col, verDir, horDir, connectionLength) {
+    while(!isOutOfBound(board, row - verDir, col - horDir) && board[row - verDir][col - horDir] == board[row][col]) {
+        row -= verDir;         col -= horDir;
+    }
     var count = 1;
     while (!isOutOfBound(board, row + verDir, col + horDir) && board[row + verDir][col + horDir] == board[row][col]) {
         row += verDir; col += horDir;       count++;
     }
-    console.log("row: " + row + " col: " + col + " count: " + count);
-    return count >= connectionLength;            
+    return count >= connectionLength;               
 }
 function hasWonInAnyDir(board, row, col, connectionLength) {
-    return  
-        hasWonInOneDir(board, row, col, 1, 0, connectionLength)
-        // hasWonInOneDir(board, row, col, 1, 0, connectionLength) 
-        // hasWonInOneDir(board, row, col, 0, 1, connectionLength)
-        // ||  hasWonInOneDir(board, row, col, 1, 1, connectionLength)
-        // ||  hasWonInOneDir(board, row, col, 1, -1, connectionLength)
+    return  hasWonInOneDir(board, row, col, 1, 0, connectionLength)
+        ||  hasWonInOneDir(board, row, col, 0, 1, connectionLength) 
+        ||  hasWonInOneDir(board, row, col, 1, 1, connectionLength)
+        ||  hasWonInOneDir(board, row, col, 1, -1, connectionLength)
         ;
 }
 function isDraw(board, defaultValue) {
@@ -133,50 +129,12 @@ function isDraw(board, defaultValue) {
     return true;
 }
 var gameDone = function (board) {
-    //Check for Winner
-    // for (var i = 0; i < board.length; i++)
-    //     for (var j = 0; j < board[i].length; j++) {
-    //         if (board[i][j] == 0) continue;
-    //         if (hasWonInAnyDir(board, i, j, 3)) return {result:"winner", winner:board[i][j]};
-    //     }
-    for (var i=0;i<3;i++) {
-        var lastSquare=0;
-        for (var q=0;q<3;q++) {
-            if (q==0) {
-                if (board[i][q]==0) break;
-                lastSquare=board[i][q];
-            } else
-            {
-                if (board[i][q]==0||lastSquare!=board[i][q]) break;
-                lastSquare=board[i][q];
-            }
-            if (q==2) return {result:"winner",winner:board[i][q]};
+    // Check for Winner
+    for (var i = 0; i < board.length; i++)
+        for (var j = 0; j < board[i].length; j++) {
+            if (board[i][j] == 0) continue;
+            if (hasWonInAnyDir(board, i, j, 3)) return {result:"winner", winner:board[i][j]};
         }
-
-    }
-
-    for (var i=0;i<3;i++) {
-        var lastSquare=0;
-        for (var q=0;q<3;q++) {
-            if (q==0) {
-                if (board[q][i]==0) break;
-                lastSquare=board[q][i];
-            } else
-            {
-                if (board[q][i]==0||lastSquare!=board[q][i]) break;
-                lastSquare=board[q][i];
-            }
-            if (q==2) return {result:"winner",winner:board[q][i]};
-        }
-
-    }
-    if (board[0][0] != 0 && (board[0][0] == board[1][1] && board[2][2] == board[1][1])) {
-        return  {result:"winner",winner:board[0][0]};
-    }
-    //Check for ways to win
-    if (board[0][2] != 0 && board[0][2] == board[1][1] && board[2][0] == board[1][1]) {
-        return  {result:"winner",winner:board[1][1]};
-    }
     //Check StaleMate
     if (isDraw(board, 0)) return {result: "stalemate"};
     return {result:"live",winner:null};
