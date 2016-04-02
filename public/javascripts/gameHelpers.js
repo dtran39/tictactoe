@@ -69,16 +69,14 @@ function cleanGameByPlayer(gameRegistrar,playerId) {
     }
 }
 
-function computerMove(gameRegistrar,io, gamePlaying,delay) {
-
+function computerMove(size, gameRegistrar,io, gamePlaying,delay) {
     var player = gamePlaying.currentPlayer;
-
     var scores = ai.scoreBoard(gamePlaying.board,player.id);
     var maxScore = 0;
     var r_move = 0, c_move=0;
     var scoreHold = new Array();
-    for (var r=0;r<3;r++){
-        for (var c=0;c<3;c++) {
+    for (var r = 0; r < size; r++){
+        for (var c = 0; c < size; c++) {
             if (maxScore == scores[r][c]){
                 scoreHold.push({r:r,c:c,score:scores[r][c]});
             }else if (maxScore<scores[r][c]) {
@@ -93,8 +91,7 @@ function computerMove(gameRegistrar,io, gamePlaying,delay) {
        var select= Math.floor(Math.random() * scoreHold.length-1) + 1;
        r_move=scoreHold[select].r;
        c_move=scoreHold[select].c;
-    }else
-    {
+    }else {
         r_move=scoreHold[0].r;
         c_move=scoreHold[0].c;
     }
@@ -107,7 +104,6 @@ function computerMove(gameRegistrar,io, gamePlaying,delay) {
         io.in(gamePlaying.playerX.id).emit('game_message',{message:"Stale Mate!"});
         getGame(gameRegistrar,gamePlaying.id).endGame(io, gameRegistrar);
     } else if (gamePlaying.isWinner()) {
-
         var gameCompleted={
             game:gamePlaying,
             winner:gamePlaying.playerO.id

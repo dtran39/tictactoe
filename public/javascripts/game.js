@@ -5,7 +5,7 @@ function Player(clientId,userName,wins,losses,stalemate,state,ai) {
         return obj;
 }
     
-function Game(playerList,id) {
+function Game(size, playerList,id) {
     playerList.requester.icon="X";      this.playerX=playerList.requester;
     playerList.requestee.icon="O";      this.playerO= playerList.requestee;
     this.players=[this.playerX,this.playerO];
@@ -14,8 +14,10 @@ function Game(playerList,id) {
     //Main Vars
     var GAME_CONNECTOR = "___";
     this.id= id != null ? id:this.playerX.id + GAME_CONNECTOR + this.playerO.id;
-    this.board=[[0,0,0],[0,0,0],[0,0,0]];
-    this.aiscore=[[0,0,0],[0,0,0],[0,0,0]];
+
+    var board = new Array(size); for (var i = 0; i < size; i++) board[i] = new Array(size).fill(0);
+    this.board = board.slice(0);
+    this.aiscore= board.slice(0);
     this.stats={x:{wins:0,losses:0,stale:0},o:{wins:0,losses:0,stale:0}};
     this.live=true;
     return this;
@@ -61,6 +63,7 @@ Game.prototype.completeTurn = function(player,location) {
     }
 }
 
+
 Game.prototype.isStalemate = function() {
     if (gameDone(this.board).result=="stalemate") {
         if (this.live) {
@@ -80,26 +83,18 @@ Game.prototype.isWinner = function() {
             if (this.playerX.id==results.winner) {
                 this.stats.x.wins++;
                 this.stats.o.losses++;
-            }else
-            {
+            }else {
                 this.stats.x.losses++;
                 this.stats.o.wins++;
             }
             this.live=false;
         }
-
-
         return true;
     }
     return false;
 
 };
 
-Game.prototype.whoWon = function() {
-   if (!this.winner) return null;
-   var wonBy = gameDone(this.board).winner;
-   return (wonBy == this.playerX.id) ? this.playerX : this.playerO;
-};
 function isOutOfBound(board, row, col) {
     var height = board.length, width = board[0].length;
     return (row < 0) || (row > height - 1) || (col < 0) || (col > width - 1);    
@@ -118,10 +113,9 @@ function hasWonInAnyDir(board, row, col, connectionLength) {
     return  hasWonInOneDir(board, row, col, 1, 0, connectionLength)
         ||  hasWonInOneDir(board, row, col, 0, 1, connectionLength) 
         ||  hasWonInOneDir(board, row, col, 1, 1, connectionLength)
-        ||  hasWonInOneDir(board, row, col, 1, -1, connectionLength)
-        ;
+        ||  hasWonInOneDir(board, row, col, 1, -1, connectionLength);
 }
-function isDraw(board, defaultValue) {
+function isTied(board, defaultValue) {
     for (var i = 0; i < board.length; i++)
         for (var j = 0; j < board[0].length; j++)
             if (board[i][j] == defaultValue)
@@ -129,14 +123,14 @@ function isDraw(board, defaultValue) {
     return true;
 }
 var gameDone = function (board) {
-    // Check for Winner
+    // Check for Winner, need to check very spot that has been marked (O (n ^ 2) -> need to mark the currently marked spot)
     for (var i = 0; i < board.length; i++)
         for (var j = 0; j < board[i].length; j++) {
             if (board[i][j] == 0) continue;
             if (hasWonInAnyDir(board, i, j, 3)) return {result:"winner", winner:board[i][j]};
         }
     //Check StaleMate
-    if (isDraw(board, 0)) return {result: "stalemate"};
+    if (isTied(board, 0)) return {result: "stalemate"};
     return {result:"live",winner:null};
 }
 //
