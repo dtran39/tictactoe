@@ -1,0 +1,53 @@
+<div class="viewBox">
+  <div class="header"></div>
+  <div class="playerHeader">
+    <div class="playerInfoBox"><span class="playerNameBox"><span id="playerName" class="basetext"></span></span><span class="updateBut"><a id="updateName" href="#" class="gameButton">Update</a></span></div>
+    <div class="playerStatsBox"><span alt="Wins" class="wins">wins:<span id="wins" class="basetext"></span></span><span class="losses">losses:<span id="losses" class="basetext"></span></span><span class="ties">ties:<span id="ties" class="basetext"></span></span></div>
+  </div>
+  <div id="messages">
+    <div id="gameMessage" class="gameMessage"></div><a id="viewButton" href="#" class="gameButton">All Logs</a>
+  </div>
+  <div id="archiveMessageBox">
+    <div id="archiveMessages" class="gameMessage"></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="gameHeader">
+    <div class="gameActionPanel"><a id="playComputer" href="#" class="gameButton">Play Computer |</a><a id="computerSimulation" href="#" class="gameButton">Computer Simulation</a></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="gameIconPanel"><span class="iconView">You:<span id="myIcon">X</span></span><span class="iconView">Opponent:<span id="oppIcon">O</span></span><a id="swapIcons" href="#" class="gameButton">Swap</a></div>
+  <div class="gameViewBox">
+    <div class="tictacbox">
+      <div class="row0">
+        <div id="row0_0" class="boxdims"></div>
+        <div class="col2 coldim">
+          <div id="row0_1" class="colbox"></div>
+          <div id="row0_2" class="colbox"></div>
+        </div>
+      </div>
+      <div class="row1">
+        <div id="row1_0" class="boxdims"></div>
+        <div class="col2 coldim">
+          <div id="row1_1" class="colbox"></div>
+          <div id="row1_2" class="colbox"></div>
+        </div>
+      </div>
+      <div class="row2">
+        <div id="row2_0" class="boxdims"></div>
+        <div class="col2 coldim">
+          <div id="row2_1" class="colbox"></div>
+          <div id="row2_2" class="colbox"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="menu">
+    <div class="gameList">
+      <ul id="availGames" class="gameText"></ul>
+    </div>
+    <div class="instructions">
+      <div class="gameTitle">Game Instructions</div>
+      <div class="gameText">Request a Game by selecting an Available Game Request.  Game Requestor is always the X and Opponent is O.</div>
+    </div>
+  </div>
+</div>

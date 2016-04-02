@@ -16,16 +16,7 @@ var gameId = "";
 var logViewShow=false;
 
 
-var gameParams = {
-    userName:"",
-    wins:0,
-    losses:0,
-    sessId:"",
-    stalemates:0
-};
-
-
-
+var gameParams = {    userName:"",    wins:0,    losses:0,    sessId:"",    stalemates:0    };
 $(document).ready(function () {
 
     var socket = io(GAME_HOST);
