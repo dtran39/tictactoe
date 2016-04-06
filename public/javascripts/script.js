@@ -45,8 +45,10 @@ $(document).ready(function () {
         $(".gameViewBox").slideDown(500);
         if (game.currentPlayer.computerai) {
             //aiTurnPlay(game);
-            var row= Math.floor(Math.random() * 3-1) + 1;
-            var col= Math.floor(Math.random() * 3-1) + 1;
+            var board = game.board, height = board.length, width = board[0].length;
+            var row= Math.floor(Math.random() * height - 1) + 1;
+            var col= Math.floor(Math.random() * width - 1) + 1;
+            console.log(height + " " + width);
             var playerInfo = {"gameId": game.id, "player": game.currentPlayer.id, "action": {"row": row, "quad": col}};
 
             socket.emit('playTurn', playerInfo);
@@ -372,9 +374,10 @@ $(document).ready(function () {
         var maxScore = 0;
         var r_move = 0;
         var c_move = 0;
+        var board = game.board, height = board.length, width = board[0].length;
         var scoreHold=[];
-        for (var r=0;r<3;r++){
-            for (var c=0;c<3;c++) {
+        for (var r = 0;r < height; r++){
+            for (var c = 0; c< width; c++) {
                 if (maxScore==scores[r][c]){
                     scoreHold.push({r:r,c:c,score:scores[r][c]});
                 }else if (maxScore<scores[r][c]) {
@@ -503,46 +506,44 @@ Display code
      *
      * The Scores uses the Global SCORES... Var to show or not show the scores.
      *
-     * @param game_data
+     * @param board
      * @param activate
      * @param scores
      */
-    function updateBoard(game_data, activate,scores) {
+    function updateBoard(board, activate,scores) {
 
-        var newScores = scoreBoard(game_data,clientId);
+        var newScores = scoreBoard(board,clientId);
+        var height = board.length, width = board[0].length;
+        for (var r = 0; r < height; ++r) {
+            for (var c = 0; c < width; ++c) {
+                var cellindex = "#row" + r + "_" + c;
+                if (board[r][c] == 0 && activate) {
 
-        for (var i = 0; i < 3; ++i) {
-
-            for (var r = 0; r < 3; ++r) {
-                var rowindex = "#row" + i + "_" + r;
-
-                if (game_data[i][r] == 0 && activate) {
-
-                    $(rowindex).empty();
+                    $(cellindex).empty();
                     if (SHOW_SCORES) {
-                        $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
+                        $(cellindex).append("<span class='scoreText'>"+newScores[r][c]+"/" +scores[r][c] + "</span>");
                     }
                     if (!SIMULATION_RUN) {
-                        $(rowindex).bind('mouseenter mouseleave', selectionSetup(rowindex));
+                        $(cellindex).bind('mouseenter mouseleave', selectionSetup(cellindex));
                     }
 
-                    $(rowindex).bind('click', playSetup(i, r));
+                    $(cellindex).bind('click', playSetup(r, c));
 
-                } else if (game_data[i][r] == 0 && !activate) {
-                    $(rowindex).empty();
+                } else if (board[r][c] == 0 && !activate) {
+                    $(cellindex).empty();
                     if (!SIMULATION_RUN&&!SHOW_SCORES) {
-                        $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
+                        $(cellindex).append("<span class='scoreText'>"+newScores[r][c]+"/" +scores[r][c] + "</span>");
                     }
-                    $(rowindex).unbind();
+                    $(cellindex).unbind();
                 }
-                else if (game_data[i][r] != 0) {
-                    $(rowindex).unbind();
-                    if (game_data[i][r] == clientId) {
+                else if (board[r][c] != 0) {
+                    $(cellindex).unbind();
+                    if (board[r][c] == clientId) {
 
-                        $(rowindex).empty().append(playerIcon);
+                        $(cellindex).empty().append(playerIcon);
                     } else {
 
-                        $(rowindex).empty().append(oppPlayerIcon);
+                        $(cellindex).empty().append(oppPlayerIcon);
                     }
                 }
             }

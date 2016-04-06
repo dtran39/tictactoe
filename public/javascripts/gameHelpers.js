@@ -64,14 +64,14 @@ function cleanGameByPlayer(gameRegistrar,playerId) {
     }
 }
 
-function computerMove(size, gameRegistrar,io, gamePlaying,delay) {
+function computerMove(height, width, gameRegistrar,io, gamePlaying,delay) {
     var player = gamePlaying.currentPlayer;
     var scores = ai.scoreBoard(gamePlaying.board,player.id);
     var maxScore = 0;
     var r_move = 0, c_move=0;
     var scoreHold = new Array();
-    for (var r = 0; r < size; r++){
-        for (var c = 0; c < size; c++) {
+    for (var r = 0; r < height; r++){
+        for (var c = 0; c < width; c++) {
             if (maxScore == scores[r][c]){
                 scoreHold.push({r:r,c:c,score:scores[r][c]});
             }else if (maxScore<scores[r][c]) {

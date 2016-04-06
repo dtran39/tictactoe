@@ -147,7 +147,7 @@ function playTurn(gameRegistrar, playerList, io, socket){
             io.in(gameId).emit('turn_played',gamePlaying);
             if (gamePlaying.currentPlayer.computerai) {
                 setTimeout(function() {
-                    computerMove(3, gameRegistrar,io, gamePlaying)},100);
+                    computerMove(3, 3, gameRegistrar,io, gamePlaying)},100);
             }
         }
     };
