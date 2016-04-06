@@ -4,7 +4,7 @@ var gameHelpers = require("./gameHelpers.js");
 var gameDone = gameHelpers.gameDone, getGame = gameHelpers.getGame, playerInRoom = gameHelpers.playerInRoom, 
     extractParams = gameHelpers.extractParams, getCookieValue = gameHelpers.getCookieValue, getPlayer = gameHelpers.getPlayer,
     cleanGameByPlayer = gameHelpers.cleanGameByPlayer, computerMove = gameHelpers.computerMove;
-
+var globalHeight = 3, globalWidth = 3;
 
 function requestGame(gameRegistrar,playerList, io, socket){
     return  function(data){
@@ -13,7 +13,7 @@ function requestGame(gameRegistrar,playerList, io, socket){
             requester:getPlayer(playerList, data.requestID),
             requestee:getPlayer(playerList, data.openPlayerID)
         };
-        var game = new Game(3, 3, players);
+        var game = new Game(globalHeight, globalWidth, players);
         gameRegistrar.push(game);
         game.players.forEach(function(player) {
             player.state="pending";
@@ -48,7 +48,7 @@ function requestComputerGame(playerList, gameRegistrar, io) {
             requestee:aiPlayer
         };
 
-        var game = new Game(3, 3, players,data.requestID);
+        var game = new Game(globalHeight, globalWidth, players,data.requestID);
         game.state="live";
         gameRegistrar.push(game);
         game.players.forEach(function(player) {
@@ -75,7 +75,7 @@ function requestSimulation(gameRegistrar,playerList, io){
             requestee:aiPlayer
         };
 
-        var game = new Game(3, 3, players,data.requestID);
+        var game = new Game(globalHeight, globalWidth, players,data.requestID);
         game.state="SIMULATION_RUN";
         gameRegistrar.push(game);
         game.players.forEach(function(player) {
@@ -147,7 +147,7 @@ function playTurn(gameRegistrar, playerList, io, socket){
             io.in(gameId).emit('turn_played',gamePlaying);
             if (gamePlaying.currentPlayer.computerai) {
                 setTimeout(function() {
-                    computerMove(3, 3, gameRegistrar,io, gamePlaying)},100);
+                    computerMove(gameRegistrar,io, gamePlaying)},100);
             }
         }
     };

@@ -63,8 +63,33 @@ function cleanGameByPlayer(gameRegistrar,playerId) {
         }
     }
 }
-
-function computerMove(height, width, gameRegistrar,io, gamePlaying,delay) {
+function computerMove(gameRegistrar, io, gamePlaying, delay) {
+    var player = gamePlaying.currentPlayer;
+    var board = gamePlaying.board, height = board.length, width = board[0].length;
+    // Random move
+    var r_move = 0, c_move = 0;
+    do {
+        r_move = Math.floor(Math.random() * height - 1) + 1;
+        c_move = Math.floor(Math.random() * width - 1) + 1;
+    } while (board[r_move][c_move] != 0);
+    gamePlaying.completeTurn(player,[r_move,c_move]);
+    // Is end
+    if (gamePlaying.isStalemate()) {
+        io.in(gamePlaying.playerX.id).emit('stale_mate',gamePlaying);
+        io.in(gamePlaying.playerX.id).emit('game_message',{message:"Stale Mate!"});
+        getGame(gameRegistrar,gamePlaying.id).endGame(io, gameRegistrar);
+    } else if (gamePlaying.isWinner()) {
+        var gameCompleted={
+            game:gamePlaying,
+            winner:gamePlaying.playerO.id
+        };
+        io.in(gamePlaying.playerX.id).emit('game_won',gameCompleted);
+        getGame(gameRegistrar,gamePlaying.id).endGame(io, gameRegistrar);
+    }else {
+        io.in(gamePlaying.playerX.id).emit('turn_played',gamePlaying);
+    }
+}
+function computerMoveOriginal(gameRegistrar,io, gamePlaying,delay) {
     var player = gamePlaying.currentPlayer;
     var scores = ai.scoreBoard(gamePlaying.board,player.id);
     var maxScore = 0;
