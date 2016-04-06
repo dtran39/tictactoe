@@ -356,7 +356,7 @@ $(document).ready(function () {
     function playTurn(row, quad) {
 
         var playerInfo = {"gameId": gameId, "player": clientId, "action": {"row": row, "quad": quad}};
-        $("#row" + row + "_" + quad).toggleClass("selecting");
+        $("#cell" + row + "_" + quad).toggleClass("selecting");
         socket.emit('playTurn', playerInfo);
 
     }
@@ -514,7 +514,7 @@ Display code
         var height = board.length, width = board[0].length;
         for (var r = 0; r < height; ++r) {
             for (var c = 0; c < width; ++c) {
-                var cellindex = "#row" + r + "_" + c;
+                var cellindex = "#cell" + r + "_" + c;
                 if (board[r][c] == 0 && activate) {
 
                     $(cellindex).empty();

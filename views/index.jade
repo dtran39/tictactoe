@@ -35,12 +35,11 @@ block content
           a(id="swapIcons",href="#").gameButton Swap
       div.gameViewBox
         div.tictacbox
-          each r in [0, 1, 2]
-            div(class='row')
-                div(id='row' + r + '_0').boxdims
-                div.col2.coldim
-                    each c in [1, 2]
-                      div(id='row' + r + '_' + c).colbox
+          table
+            each r in [0, 1, 2]
+              tr
+                each c in [0, 1, 2]
+                  td(id="cell" + r + "_" + c)
       div.menu
         div.gameList
             ul(id='availGames').gameText
