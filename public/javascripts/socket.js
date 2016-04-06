@@ -5,6 +5,38 @@ var gameDone = gameHelpers.gameDone, getGame = gameHelpers.getGame, playerInRoom
     extractParams = gameHelpers.extractParams, getCookieValue = gameHelpers.getCookieValue, getPlayer = gameHelpers.getPlayer,
     cleanGameByPlayer = gameHelpers.cleanGameByPlayer, computerMove = gameHelpers.computerMove;
 
+
+function requestGame(gameRegistrar,playerList, io, socket){
+    return  function(data){
+        //Create a New Game for Request
+        var players = {
+            requester:getPlayer(playerList, data.requestID),
+            requestee:getPlayer(playerList, data.openPlayerID)
+        };
+        var game = new Game(3, 3, players);
+        gameRegistrar.push(game);
+        game.players.forEach(function(player) {
+            player.state="pending";
+        });
+        function sendRequest() {
+            io.emit("player_update",game.playerX);
+            io.in(game.playerO.id).emit('request_to_join', game);
+            io.emit("player_update",game.playerO);
+
+        }
+        /*
+        Send Request to other Player, after checking if client already has a game.
+         */
+        if (playerInRoom(game.id,socket)) {
+                sendRequest();
+        }else {
+            socket.join(game.id, function() {
+                sendRequest();
+            });
+        }
+
+    };
+}
 function requestComputerGame(playerList, gameRegistrar, io) {
     return function(data){
         //Create Computer Player
@@ -12,11 +44,11 @@ function requestComputerGame(playerList, gameRegistrar, io) {
         //Create a New Game for Request
         getPlayer(playerList, data.requestID).computerai=false;
         var players = {
-        	requester:getPlayer(playerList, data.requestID),
-        	requestee:aiPlayer
+            requester:getPlayer(playerList, data.requestID),
+            requestee:aiPlayer
         };
 
-        var game = new Game(3, players,data.requestID);
+        var game = new Game(3, 3, players,data.requestID);
         game.state="live";
         gameRegistrar.push(game);
         game.players.forEach(function(player) {
@@ -32,7 +64,33 @@ function requestComputerGame(playerList, gameRegistrar, io) {
 
     };
 }
+function requestSimulation(gameRegistrar,playerList, io){
+    return function(data){
+        //Create Computer Player
+        var aiPlayer = new Player(data.requestID+"_AI","Computer",0,0,0,"playing",true);
+        //Create a New Game for Request
+        getPlayer(playerList, data.requestID).computerai=true;
+        var players = {
+            requester:getPlayer(playerList, data.requestID),
+            requestee:aiPlayer
+        };
 
+        var game = new Game(3, 3, players,data.requestID);
+        game.state="SIMULATION_RUN";
+        gameRegistrar.push(game);
+        game.players.forEach(function(player) {
+            player.state="playing";
+        });
+
+        function sendRequest(gamePlaying) {
+            io.emit("player_update",gamePlaying.playerX);
+            gamePlaying.startGame(io);
+        }
+
+        sendRequest(game);
+
+    }
+}
 
 function updatePlayerName(io, playerList, socket) {
     return function(nameData) {
@@ -62,71 +120,8 @@ function joinGame(gameRegistrar, socket, io) {
         }
     }
 }
-function requestGame(gameRegistrar,playerList, io, socket){
-	return  function(data){
-        //Create a New Game for Request
-        var players = {
-        	requester:getPlayer(playerList, data.requestID),
-        	requestee:getPlayer(playerList, data.openPlayerID)
-        };
-        var game = new Game(3, players);
-        gameRegistrar.push(game);
-        game.players.forEach(function(player) {
-            player.state="pending";
-        });
-
-        function sendRequest() {
-            io.emit("player_update",game.playerX);
-            io.in(game.playerO.id).emit('request_to_join', game);
-            io.emit("player_update",game.playerO);
-
-        }
-
-        /*
-        Send Request to other Player, after checking if client already has a game.
-         */
-        if (playerInRoom(game.id,socket)) {
-                sendRequest();
-        }else
-        {
-
-            socket.join(game.id, function() {
-                sendRequest();
-            });
-        }
 
 
-    };
-}
-function requestSimulation(gameRegistrar,playerList, io){
-	return function(data){
-
-        //Create Computer Player
-        var aiPlayer = new Player(data.requestID+"_AI","Computer",0,0,0,"playing",true);
-
-        //Create a New Game for Request
-        getPlayer(playerList, data.requestID).computerai=true;
-        var players = {
-        	requester:getPlayer(playerList, data.requestID),
-        	requestee:aiPlayer
-        };
-
-        var game = new Game(3, players,data.requestID);
-        game.state="SIMULATION_RUN";
-        gameRegistrar.push(game);
-        game.players.forEach(function(player) {
-            player.state="playing";
-        });
-
-        function sendRequest(gamePlaying) {
-            io.emit("player_update",gamePlaying.playerX);
-            gamePlaying.startGame(io);
-        }
-
-        sendRequest(game);
-
-    }
-}
 function playTurn(gameRegistrar, playerList, io, socket){
 	return function(data){
         var gameId=data.gameId;
@@ -148,17 +143,13 @@ function playTurn(gameRegistrar, playerList, io, socket){
             };
             io.in(gameId).emit('game_won',gameCompleted);
             getGame(gameRegistrar,gameId).endGame(io, gameRegistrar);
-        }else
-        {
+        }else {
             io.in(gameId).emit('turn_played',gamePlaying);
             if (gamePlaying.currentPlayer.computerai) {
                 setTimeout(function() {
                     computerMove(3, gameRegistrar,io, gamePlaying)},100);
-
             }
-
         }
-
     };
 }
 function disconnect(gameRegistrar, playerList, io, socket){

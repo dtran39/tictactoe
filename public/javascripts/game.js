@@ -5,7 +5,7 @@ function Player(clientId,userName,wins,losses,stalemate,state,ai) {
         return obj;
 }
     
-function Game(size, playerList,id) {
+function Game(height, width, playerList,id) {
     playerList.requester.icon="X";      this.playerX=playerList.requester;
     playerList.requestee.icon="O";      this.playerO= playerList.requestee;
     this.players=[this.playerX,this.playerO];
@@ -15,7 +15,7 @@ function Game(size, playerList,id) {
     var GAME_CONNECTOR = "___";
     this.id= id != null ? id:this.playerX.id + GAME_CONNECTOR + this.playerO.id;
 
-    var board = new Array(size); for (var i = 0; i < size; i++) board[i] = new Array(size).fill(0);
+    var board = new Array(height); for (var i = 0; i < height; i++) board[i] = new Array(width).fill(0);
     this.board = board.slice(0);
     this.aiscore= board.slice(0);
     this.stats={x:{wins:0,losses:0,stale:0},o:{wins:0,losses:0,stale:0}};

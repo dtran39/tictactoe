@@ -7,8 +7,7 @@
 
 var GAME_HOST = 'http://localhost:3000/';
 var COMPUTER_PACE_MS=100;
-var SHOW_SCORES=false;
-var SIMULATION_RUN=false;
+var SHOW_SCORES=false, SIMULATION_RUN=false;
 
 //Global variables that are necessary for the session.
 var playerIcon="X",oppPlayerIcon="O",clientId;
@@ -82,7 +81,6 @@ $(document).ready(function () {
      *
      */
     socket.on('server_message', function (data) {
-
         $('#receiver').append('<li>Message: ' + data + '</li>');
     });
 
@@ -92,7 +90,6 @@ $(document).ready(function () {
      *
      */
     socket.on('game_message', function (data) {
-
         logEvent(data.message,true);
     });
 
@@ -414,7 +411,6 @@ $(document).ready(function () {
         var cookieStr=gameParams.userName+"|"+gameParams.sessId+"|"+gameParams.wins+"|"+gameParams.losses+"|"+gameParams.stalemates;
         setCookie("tttGameParams",cookieStr,3);
     }
-
     /**
      * Get the Game Params from the Cookie.
      *
@@ -429,7 +425,6 @@ $(document).ready(function () {
         gameParams.stalemates=parseStr[4];
 
     }
-
 
     /**
      * Set the Cookie.
@@ -485,14 +480,11 @@ Display code
             socket.emit('requestGame', startDetails);
         });
     }
-
-
     /**
      * Update Display with Player info.
      *
      */
     function updateDisplay(){
-
         $("#playerName").empty().append("Player: " + gameParams.userName);
         $("#wins").empty().append(gameParams.wins);
         $("#losses").empty().append(gameParams.losses);
@@ -501,18 +493,9 @@ Display code
     }
 
     //Helper Functions
-    function selectionSetup(selection) {
-        // alert(selection);
-        return function () {
-            showSelection(selection);
-        }
-    }
+    function selectionSetup(selection) { return function () {  showSelection(selection);} }
 
-
-    function showSelection(selection) {
-        // alert(selection);
-        $(selection).toggleClass("selecting");
-    }
+    function showSelection(selection) { $(selection).toggleClass("selecting"); }
 
 
     /**
@@ -562,10 +545,7 @@ Display code
                         $(rowindex).empty().append(oppPlayerIcon);
                     }
                 }
-
-
             }
-
         }
     }
 

@@ -1,19 +1,14 @@
-/**
- * Created by stash on 12/3/14.
- */
-
-
 function scoreBoard(board,player_id) {
     //console.log("Starting Scoring");
-    var scores =[[0,0,0],[0,0,0],[0,0,0]];
-    for (var r=0;r<3;r++) {
-        for (var c=0;c<3;c++) {
+    var height = board.length, width = board[0].length;
+    var newBoard = new Array(height); for (var i = 0; i < height; i++) newBoard[i] = new Array(width).fill(0);
+    var scores = newBoard.slice(0);
+    for (var r = 0; r < height; r++) {
+        for (var c = 0;c < width; c++) {
             if (board[r][c]==0) {
-               // console.log("Starting Scoring of "+ r + "," + c);
                 if (r==1||c==1) {
                     scores[r][c]=tallyCenterAxis(board,r,c,player_id);
-                }else
-                {
+                }else {
                     var r_inc = r==0?1:-1;
                     var c_inc = c==0?1:-1;
 
@@ -23,20 +18,13 @@ function scoreBoard(board,player_id) {
                     scores[r][c]=scoreCard;
 
                 }
-
-
-            }else
-            {
+            } else {
                 scores[r][c]=-10;
             }
-           // console.log("Scoring for "+ r + "," + c + " = " + scores[r][c]);
         }
-
     }
-
     return scores;
 }
-
 function tallyCenterAxis(board,r,c,player_id) {
 
     var scoreVal=0;
@@ -54,26 +42,18 @@ function tallyCenterAxis(board,r,c,player_id) {
         scoreVal = scoreVal + tallyLinearAxis(board,r,c,0,c==0?1:-1,player_id);
 
     }
-
     return scoreVal;
-
 }
 
-
-
 function tallyLinearAxis(board,r,c,r_inc,c_inc,player_id) {
-
-
     var lastId;
     var first=true;
 
     if (r_inc!=0&&c_inc!=0){
         return score(board[r+r_inc][c+c_inc],board[r+r_inc*2][c+c_inc*2],player_id);
     }else {
-
         if (r_inc!=0){
             return score(board[r+r_inc][c],board[r+r_inc*2][c],player_id);
-
         }else{
             return score(board[r][c+c_inc],board[r][c+c_inc*2],player_id);
         }
@@ -82,7 +62,6 @@ function tallyLinearAxis(board,r,c,r_inc,c_inc,player_id) {
     }
 
 }
-
 function score(adj,end,player_id){
     if (adj==player_id&&end==player_id) return 60+30;
     if (adj!=player_id&&adj!=0&&end!=player_id&&end!=0) return 40+40;
@@ -90,8 +69,5 @@ function score(adj,end,player_id){
     if (adj==player_id&&end==0) return 20;
     if (adj==0&&end==player_id) return 20;
     return 0;
-
 }
-
-//for Node support
 module.exports.scoreBoard = scoreBoard;

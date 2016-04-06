@@ -25,17 +25,9 @@ app.get('/', routes.index);
 http = http.createServer(app);
 // module and methods
 var socketModule = require("./public/javascripts/socket.js");
-var ai = require("./public/javascripts/AIPlayer.js");
-var gameModule = require("./public/javascripts/game.js"), Game = gameModule.Game, Player = gameModule.Player;
-var gameHelpers = require("./public/javascripts/gameHelpers.js");
-var gameDone = gameHelpers.gameDone, getGame = gameHelpers.getGame, playerInRoom = gameHelpers.playerInRoom, 
-    extractParams = gameHelpers.extractParams, getCookieValue = gameHelpers.getCookieValue, getPlayer = gameHelpers.getPlayer,
-    cleanGameByPlayer = gameHelpers.cleanGameByPlayer, computerMove = gameHelpers.computerMove;
 // Global vars
 var io = require('socket.io')(http);
-var gameRegistrar=new Array();
-var playerList = new Array();
-
+var gameRegistrar=new Array(), playerList = new Array();
 /*
  Setup pSocket IO Connection
  - All message listeners are defined in this function.

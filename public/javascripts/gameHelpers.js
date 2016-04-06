@@ -36,23 +36,20 @@ function assignCookieParams(userName, sessId, wins, losses, stalemates) {
     }
 }
 function extractParams(cookieParamStr, socketId) {
-    if (cookieParamStr === "") return extractParams(socketId, socketId, 0, 0, 0);
+    if (cookieParamStr === "") return assignCookieParams(socketId, socketId, 0, 0, 0);
     var params = cookieParamStr.split("|");
     return assignCookieParams(params[0], params[1], params[2], params[3], params[4]);
 }
 //Gets cookie data from Request and returns Cookie with name
 function getCookieValue(request,cookie) {
-    var list = {},
-        rc = request.headers.cookie;
+    var list = {};
+    var rc = request.headers.cookie;
     var match="";
     rc && rc.split(';').forEach(function( cookie ) {
-
        var parts = cookie.split('=');
-
        if (parts[0].trim()=="tttGameParams") match = parts[1];
 //        list[parts.shift().trim()] = unescape(parts.join('='));
     });
-
     return match;
 }
 
@@ -63,9 +60,7 @@ function cleanGameByPlayer(gameRegistrar,playerId) {
         var playerIds=gameRegistrar[i].id.split(GAME_CONNECTOR);
         if (playerIds[0]==playerId||playerIds[1]==playerId){
             gameRegistrar.splice(i,1);
-
         }
-
     }
 }
 
@@ -88,7 +83,7 @@ function computerMove(size, gameRegistrar,io, gamePlaying,delay) {
     }
     // Score hold
     if (scoreHold.length>1) {
-       var select= Math.floor(Math.random() * scoreHold.length-1) + 1;
+       var select = Math.floor(Math.random() * scoreHold.length-1) + 1;
        r_move=scoreHold[select].r;
        c_move=scoreHold[select].c;
     }else {
