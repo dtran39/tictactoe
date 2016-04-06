@@ -35,21 +35,12 @@ block content
           a(id="swapIcons",href="#").gameButton Swap
       div.gameViewBox
         div.tictacbox
-            div.row0
-                div(id='row0_0').boxdims
+          each r in [0, 1, 2]
+            div(class='row' + r)
+                div(id='row' + r + '_0').boxdims
                 div.col2.coldim
-                    div(id='row0_1').colbox
-                    div(id='row0_2').colbox
-            div.row1
-                div(id='row1_0').boxdims
-                div.col2.coldim
-                    div(id='row1_1').colbox
-                    div(id='row1_2').colbox
-            div.row2
-                div(id='row2_0').boxdims
-                div.col2.coldim
-                    div(id='row2_1').colbox
-                    div(id='row2_2').colbox
+                    each c in [1, 2]
+                      div(id='row' + r + '_' + c).colbox
       div.menu
         div.gameList
             ul(id='availGames').gameText

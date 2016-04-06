@@ -85,8 +85,6 @@ $(document).ready(function () {
     socket.on('server_message', function (data) {
         $('#receiver').append('<li>Message: ' + data + '</li>');
     });
-
-
     /**
      * Game message for general updates to game and logged.
      *

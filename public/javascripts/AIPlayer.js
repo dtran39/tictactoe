@@ -51,16 +51,13 @@ function tallyLinearAxis(board,r,c,r_inc,c_inc,player_id) {
 
     if (r_inc!=0&&c_inc!=0){
         return score(board[r+r_inc][c+c_inc],board[r+r_inc*2][c+c_inc*2],player_id);
-    }else {
+    } else {
         if (r_inc!=0){
             return score(board[r+r_inc][c],board[r+r_inc*2][c],player_id);
         }else{
             return score(board[r][c+c_inc],board[r][c+c_inc*2],player_id);
         }
-
-
     }
-
 }
 function score(adj,end,player_id){
     if (adj==player_id&&end==player_id) return 60+30;
