@@ -4,7 +4,7 @@ var gameHelpers = require("./gameHelpers.js");
 var gameDone = gameHelpers.gameDone, getGame = gameHelpers.getGame, playerInRoom = gameHelpers.playerInRoom, 
     extractParams = gameHelpers.extractParams, getCookieValue = gameHelpers.getCookieValue, getPlayer = gameHelpers.getPlayer,
     cleanGameByPlayer = gameHelpers.cleanGameByPlayer, computerMove = gameHelpers.computerMove;
-var globalHeight = 4, globalWidth = 4;
+var globalHeight = 5, globalWidth = 5;
 
 function requestGame(gameRegistrar,playerList, io, socket){
     return  function(data){

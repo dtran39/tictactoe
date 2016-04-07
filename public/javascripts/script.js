@@ -20,7 +20,6 @@ $(document).ready(function () {
 
     var socket = io(GAME_HOST);
     socket.on('connect', function () {
-
         clientId = socket.io.engine.id;
         initializeGameParams();
         console.log("ID Assigned - " + clientId);
@@ -34,17 +33,24 @@ $(document).ready(function () {
     socket.on('begin_game', function (game) {
         gameId = game.id;
         // Prepare the board
-        var board = game.board, height = board.length, width = board[0].length;
+        var board = game.board, numRow = board.length, numCol = board[0].length;
         $('#mainBoard').empty();
-        for (var r = 0; r < height; r++) {
+        for (var r = 0; r < numRow; r++) {
                 $tr = $('<tr>');
-                for (var c = 0; c < width; c++) {
+                for (var c = 0; c < numCol; c++) {
                     $cell = $('<td>');
                     $cell.attr("id","cell" + r + "_" + c);
                     $tr.append($cell);
                 }
             $("#mainBoard").append($tr);            
         }
+        // Update size
+        var boardHeight = 500, boardWidth = 500, 
+            cellHeight = Math.floor(boardHeight / numRow), cellWidth = Math.floor(boardWidth / numCol),
+            fontSize = Math.min(cellWidth, cellHeight) * 80 / 100;
+        $('#mainBoard').css({'height': boardHeight + 'px', 'width': boardWidth + 'px'});
+        $('td').css({'height': cellHeight + 'px', 'width': cellWidth + 'px', 'font-size': fontSize + 'px'});
+        //
         if (game.currentPlayer.id == clientId)
             updateBoard(game.board, true,game.aiscore);
         else
@@ -54,9 +60,8 @@ $(document).ready(function () {
         $(".gameViewBox").slideDown(500);
         if (game.currentPlayer.computerai) {
             //aiTurnPlay(game);
-            var board = game.board, height = board.length, width = board[0].length;
-            var row= Math.floor(Math.random() * height - 1) + 1;
-            var col= Math.floor(Math.random() * width - 1) + 1;
+            var row= Math.floor(Math.random() * numRow - 1) + 1;
+            var col= Math.floor(Math.random() * numCol - 1) + 1;
             console.log(height + " " + width);
             var playerInfo = {"gameId": game.id, "player": game.currentPlayer.id, "action": {"row": row, "quad": col}};
 
@@ -101,8 +106,6 @@ $(document).ready(function () {
     socket.on('game_message', function (data) {
         logEvent(data.message,true);
     });
-
-
     /**
      * Provides the avaialble games that are on the server.  After this call,
      * the system uses update player to add and update any other player information.
@@ -155,8 +158,6 @@ $(document).ready(function () {
 
         }
     });
-
-
     /**
      * Message listener for request to Join.  Player will see an update on the game list.
      *
@@ -381,10 +382,10 @@ $(document).ready(function () {
         var maxScore = 0;
         var r_move = 0;
         var c_move = 0;
-        var board = game.board, height = board.length, width = board[0].length;
+        var board = game.board, numRow = board.length, numCol = board[0].length;
         var scoreHold=[];
-        for (var r = 0;r < height; r++){
-            for (var c = 0; c< width; c++) {
+        for (var r = 0;r < numRow; r++){
+            for (var c = 0; c< numCol; c++) {
                 if (maxScore==scores[r][c]){
                     scoreHold.push({r:r,c:c,score:scores[r][c]});
                 }else if (maxScore<scores[r][c]) {
@@ -520,9 +521,9 @@ Display code
     function updateBoard(board, activate,scores) {
 
         var newScores = scoreBoard(board,clientId);
-        var height = board.length, width = board[0].length;
-        for (var r = 0; r < height; ++r) {
-            for (var c = 0; c < width; ++c) {
+        var numRow = board.length, numCol = board[0].length;
+        for (var r = 0; r < numRow; ++r) {
+            for (var c = 0; c < numCol; ++c) {
                 var cellindex = "#cell" + r + "_" + c;
                 if (board[r][c] == 0 && activate) {
 
