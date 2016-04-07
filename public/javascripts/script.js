@@ -19,7 +19,6 @@ var gameParams = {    userName:"",    wins:0,    losses:0,    sessId:"",    stal
 $(document).ready(function () {
 
     var socket = io(GAME_HOST);
-
     socket.on('connect', function () {
 
         clientId = socket.io.engine.id;

@@ -35,11 +35,13 @@ block content
           a(id="swapIcons",href="#").gameButton Swap
       div.gameViewBox
         div.tictacbox
-          table
-            each r in [0, 1, 2]
+          table(id="mainBoard")
+            - for (var r = 0; r < 4; r++) {
               tr
-                each c in [0, 1, 2]
+              - for (var c = 0; c < 4; c++) {
                   td(id="cell" + r + "_" + c)
+              - }
+            - }        
       div.menu
         div.gameList
             ul(id='availGames').gameText

@@ -1,12 +1,10 @@
 @media (max-width: 500px) {
     .viewBox {        width:100%;    }
     .gameViewBox {
-        height:300px; width:300px;
         margin:0px auto;
         font-size: 5em;
         display:none;
     }
-
     .gameIconPanel{        display:none;    }
     #boardView{        display:none;    }
     .playerInfoBox{        float:left;    }
@@ -17,7 +15,6 @@
         margin-top:8px;
         margin-bottom:8px;
         float:right;
-
     }
     .playerHeader {
         width:100%;        height:30px;    }
@@ -28,13 +25,10 @@
 @media (min-width: 500px) {
     .viewBox { width:100%; }
     .gameViewBox {
-        height:500px;
-        width:500px;
         margin:0px auto;
         font-size: 8em;
     }
     .playerInfoBox{        float:left;    }
-
     .playerStatsBox {
         font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
         font-size: .6em;
@@ -65,8 +59,6 @@
     }
 
     .gameViewBox {
-        height:500px;
-        width:500px;
         float:left;
         margin:0px auto;
         font-size: 8em;
@@ -98,16 +90,8 @@
     }
 }
 
-.spacer {
-    height:10px;
-}
-
-.playerNameBox {
-    width:100%;
-
-
-}
-
+.spacer {    height:10px;}
+.playerNameBox {    width:100%;}
 .wins {
     padding:5px;
     margin:5px;
@@ -163,27 +147,19 @@
     font-size: .7em;
 
 }
-
 .gameHeader {
     width:90%;
     height:10px;
     margin:5px;
     padding:5px;
 }
-
-
 #playerName {
     font-family:  "Helvetica Nueue", Arial, sans-serif;
     color:black;
     margin: 5px;
     text-align: right;
 }
-
-.updateBut {
-    margin-left: 10px;
-
-}
-
+.updateBut {    margin-left: 10px; }
 .gameButton {
     font-family:  "Helvetica Nueue", Arial, sans-serif;
     color:red;
@@ -192,7 +168,6 @@
     margin:5px;
     text-decoration: none;
 }
-
 #updateName {
     font-family:  "Helvetica Nueue", Arial, sans-serif;
     color:red;
@@ -209,7 +184,6 @@
     background-color: #000099;
 
 }
-
 .scoreText {
     font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
     font-size: .2em;
@@ -217,16 +191,12 @@
 
     color: lightgray;
 }
-
 .gameMessage {
     font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
     font-size: .7em;
     color: darkblue;
 
 }
-
-
-
 #messages {
     width:100%;
     height:100%;
@@ -234,10 +204,6 @@
     margin:5px;
 
 }
-
-
-
-
 #gameMessage {
     float:left;
     width:75%;
@@ -275,10 +241,7 @@
 .menu {
     font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
     font-size: .8em;
-
-
 }
-
 .gameList {
     background-color: lightgray;
     border-radius: 25px;
@@ -297,10 +260,7 @@
     padding:10px;
 
 }
-
-.log {
-    display:none;
-}
+.log {    display:none;}
 
 .tictacbox {
     font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
@@ -313,12 +273,12 @@
 table {
   margin-left:auto; 
   margin-right:auto; 
-  width: 551px; 
+/*  width: 551px; */
   -webkit-user-select: none; 
 }
 td {
-  height: 175px;
-  width: 175px;
+  height: 100px;
+  width: 100px;
   text-align: center;
   font-size: 120px;
   border: 2px solid #cccccc;

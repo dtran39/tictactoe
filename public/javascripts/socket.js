@@ -4,7 +4,7 @@ var gameHelpers = require("./gameHelpers.js");
 var gameDone = gameHelpers.gameDone, getGame = gameHelpers.getGame, playerInRoom = gameHelpers.playerInRoom, 
     extractParams = gameHelpers.extractParams, getCookieValue = gameHelpers.getCookieValue, getPlayer = gameHelpers.getPlayer,
     cleanGameByPlayer = gameHelpers.cleanGameByPlayer, computerMove = gameHelpers.computerMove;
-var globalHeight = 3, globalWidth = 3;
+var globalHeight = 4, globalWidth = 4;
 
 function requestGame(gameRegistrar,playerList, io, socket){
     return  function(data){
@@ -22,7 +22,6 @@ function requestGame(gameRegistrar,playerList, io, socket){
             io.emit("player_update",game.playerX);
             io.in(game.playerO.id).emit('request_to_join', game);
             io.emit("player_update",game.playerO);
-
         }
         /*
         Send Request to other Player, after checking if client already has a game.
