@@ -4,7 +4,6 @@
  */
 
 //STATIC Deployment and Game Settings
-
 var GAME_HOST = 'http://localhost:3000/';
 var COMPUTER_PACE_MS=100;
 var SHOW_SCORES=false, SIMULATION_RUN=false;
@@ -13,7 +12,6 @@ var SHOW_SCORES=false, SIMULATION_RUN=false;
 var playerIcon="X",oppPlayerIcon="O",clientId;
 var gameId = "";
 var logViewShow=false;
-
 
 var gameParams = {    userName:"",    wins:0,    losses:0,    sessId:"",    stalemates:0    };
 $(document).ready(function () {
@@ -32,42 +30,14 @@ $(document).ready(function () {
      */
     socket.on('begin_game', function (game) {
         gameId = game.id;
-        // Prepare the board
-        var board = game.board, numRow = board.length, numCol = board[0].length;
-        $('#mainBoard').empty();
-        for (var r = 0; r < numRow; r++) {
-                $tr = $('<tr>');
-                for (var c = 0; c < numCol; c++) {
-                    $cell = $('<td>');
-                    $cell.attr("id","cell" + r + "_" + c);
-                    $tr.append($cell);
-                }
-            $("#mainBoard").append($tr);            
-        }
-        // Update size
-        var boardHeight = 500, boardWidth = 500, 
-            cellHeight = Math.floor(boardHeight / numRow), cellWidth = Math.floor(boardWidth / numCol),
-            fontSize = Math.min(cellWidth, cellHeight) * 80 / 100;
-        $('#mainBoard').css({'height': boardHeight + 'px', 'width': boardWidth + 'px'});
-        $('td').css({'height': cellHeight + 'px', 'width': cellWidth + 'px', 'font-size': fontSize + 'px'});
-        //
-        if (game.currentPlayer.id == clientId)
-            updateBoard(game.board, true,game.aiscore);
-        else
-            updateBoard(game.board, false,game.aiscore);
-        $(".header").slideUp(250);
-        $(".gameIconPanel").slideDown(500);
-        $(".gameViewBox").slideDown(500);
-        if (game.currentPlayer.computerai) {
-            //aiTurnPlay(game);
-            var row= Math.floor(Math.random() * numRow - 1) + 1;
-            var col= Math.floor(Math.random() * numCol - 1) + 1;
-            console.log(height + " " + width);
-            var playerInfo = {"gameId": game.id, "player": game.currentPlayer.id, "action": {"row": row, "quad": col}};
-
-            socket.emit('playTurn', playerInfo);
-        }
-
+        //Prepare the board
+        createNewBoardOnDOM(game.board, 500, 500);
+        // Update board
+        if (game.currentPlayer.id == clientId)      updateBoard(game.board, true,game.aiscore);
+        else                                        updateBoard(game.board, false,game.aiscore);
+        // Pointless animation
+        $(".header").slideUp(250); $(".gameIconPanel").slideDown(500); $(".gameViewBox").slideDown(500);
+        if (game.currentPlayer.computerai)             aiTurnPlay(game);        
     });
 
     /**
@@ -77,7 +47,6 @@ $(document).ready(function () {
      *
      */
     socket.on('turn_played', function (game) {
-
         if (game.currentPlayer.id == clientId) {
             updateBoard(game.board, true,game.aiscore);
             $('#gameMessage').empty().append('Your Turn Now!');
@@ -87,30 +56,18 @@ $(document).ready(function () {
         } else {
             updateBoard(game.board, false,game.aiscore);
             $('#gameMessage').empty().append('Waiting for Other Player!');
-
         }
-
     });
-
-    /**
-     * Server message broadcast
-     *
-     */
+    //Server message broadcast
     socket.on('server_message', function (data) {
         $('#receiver').append('<li>Message: ' + data + '</li>');
     });
-    /**
-     * Game message for general updates to game and logged.
-     *
-     */
+    //Game message for general updates to game and logged.
     socket.on('game_message', function (data) {
         logEvent(data.message,true);
     });
-    /**
-     * Provides the avaialble games that are on the server.  After this call,
-     * the system uses update player to add and update any other player information.
-     *
-     */
+    // Provides the avaialble games that are on the server.  After this call,
+    // the system uses update player to add and update any other player information.
     socket.on('available_games', function (players) {
         $('#availGames').empty();
         logEvent("Available Games Loading",true);
@@ -126,19 +83,13 @@ $(document).ready(function () {
         }
         logEvent("Games Loaded...Choose One",true);
     });
-
-
-    /**
-     * Player updates from properties like name, state and it will update the display after player info changes.
-     * States: new, left, pending, and playing.
-     *
-     */
+    // Player updates from properties like name, state and it will update the display after player info changes.
+    // States: new, left, pending, and playing.
     socket.on('player_update', function (player) {
         //$('#receiver').append('<li>Player Updated/Added: ' + data.id  + ' to ' + data.state + '</li>');
         //alert("Update for " +player.playerName + ":" +player.state);
         logEvent("Player " + player.playerName+ " Info Updated",false);
         if (player.id != clientId) {
-
             if (player.state == "new") {
                 $('#availGames').append('<li id="player_' + player.id + '"></li>');
                 addOpenGame(player);
@@ -258,20 +209,13 @@ $(document).ready(function () {
      * Initialize the main game parameters.  Sets up the buttons and various action a user can do.
      */
     function initializeGameParams(){
-
         var gameCookie = getCookie("tttGameParams");
-
         if (gameCookie!="") {
-            getGameParams(gameCookie);
-            gameParams.sessId=clientId;
-
-        }else
-        {
-            gameParams.userName=clientId;
-            gameParams.sessId=clientId;
+            getGameParams(gameCookie);              gameParams.sessId=clientId;
+        } else        {
+            gameParams.userName=clientId;           gameParams.sessId=clientId;
         }
-
-
+        // Bind DOMS to click
         $('#updateName').bind("click", function () {
             var user = prompt("Add a Name","");
             if (user!=null) {
@@ -280,10 +224,7 @@ $(document).ready(function () {
                 updateDisplay();
                 socket.emit("updatePlayerName",{"name": user});
             }
-
-
         });
-
         $('#viewButton').bind("click", function () {
             if (!logViewShow){
                 $('#archiveMessages').slideDown(500);
@@ -295,11 +236,7 @@ $(document).ready(function () {
                 $('#viewButton').empty().append("All Logs");
                 logViewShow=false;
             }
-
-
         });
-
-
         $('#swapIcons').bind("click", function() {
 
             if (playerIcon=="X".trim()) {
@@ -313,75 +250,38 @@ $(document).ready(function () {
             $("#myIcon").empty().append(playerIcon);
             $("#oppIcon").empty().append(oppPlayerIcon);
         });
-
         $('#playComputer').bind("click",function(){
-
             var startDetails = {
                 requestID: clientId,
                 action: "Request Computer Game"
-
             };
             socket.emit('requestComputerGame', startDetails);
-
         });
-
         $('#computerSimulation').bind("click",function(){
-
             var startDetails = {
                 requestID: clientId,
                 action: "Request Simulation Game"
-
             };
             socket.emit('requestSimulation', startDetails);
             SIMULATION_RUN=true;
         });
-
-
         saveParams();
         updateDisplay();
     }
 
-
-    /**
-     *
-     * Intermediate function for pass thru...
-     *
-     * @param row
-     * @param quad
-     * @returns {Function}
-     */
-    function playSetup(row, quad) {
-        // alert(selection);
-        return function () {
-            playTurn(row, quad);
-        }
-    }
-
-    /**
-     * Play client turn and update the row.
-     *
-     * @param row
-     * @param quad
-     */
-    function playTurn(row, quad) {
-
-        var playerInfo = {"gameId": gameId, "player": clientId, "action": {"row": row, "quad": quad}};
-        $("#cell" + row + "_" + quad).toggleClass("selecting");
-        socket.emit('playTurn', playerInfo);
-
-    }
-
-    /**
-     * AI turn playing, which will return complete the full turn.
-     *
-     * @param game
-     */
+    // AI turn playing, which will return complete the full turn.
     function aiTurnPlay(game) {
+        var board = game.board, numRow = board.length, numCol = board[0].length;
+        var row = Math.floor(Math.random() * numRow - 1) + 1;
+        var col = Math.floor(Math.random() * numCol - 1) + 1;
+        console.log(height + " " + width);
+        var playerInfo = {"gameId": game.id, "player": game.currentPlayer.id, "action": {"row": row, "quad": col}};
+        socket.emit('playTurn', playerInfo);
+    }
+    function aiTurnPlayOriginal(game) {
         var player = game.currentPlayer;
         var scores = scoreBoard(game.board, player.id);
-        var maxScore = 0;
-        var r_move = 0;
-        var c_move = 0;
+        var maxScore = 0, r_move = 0, c_move = 0;
         var board = game.board, numRow = board.length, numCol = board[0].length;
         var scoreHold=[];
         for (var r = 0;r < numRow; r++){
@@ -395,38 +295,28 @@ $(document).ready(function () {
                 }
             }
         }
-
         if (scoreHold.length>1) {
             var select= Math.floor(Math.random() * scoreHold.length-1) + 1;
             r_move=scoreHold[select].r;
             c_move=scoreHold[select].c;
-        }else
-        {
+        }else {
             r_move=scoreHold[0].r;
             c_move=scoreHold[0].c;
         }
-
-
         var playerInfo = {"gameId": game.id, "player": player.id, "action": {"row": r_move, "quad": c_move}};
         socket.emit('playTurn', playerInfo);
     }
  /*
  Cookie Code
-  */
-
-    /**
      * Save Params to cookie.
-     *
      */
     function saveParams() {
-        var cookieStr=gameParams.userName+"|"+gameParams.sessId+"|"+gameParams.wins+"|"+gameParams.losses+"|"+gameParams.stalemates;
+        var cookieStr=gameParams.userName+"|"+gameParams.sessId+"|"+gameParams.wins
+                        +"|"+gameParams.losses+"|"+gameParams.stalemates;
         setCookie("tttGameParams",cookieStr,3);
     }
-    /**
-     * Get the Game Params from the Cookie.
-     *
-     * @param cookieParams
-     */
+    //Get the Game Params from the Cookie.
+
     function getGameParams(cookieParams) {
         var parseStr = cookieParams.split("|");
         gameParams.userName=parseStr[0];
@@ -437,26 +327,14 @@ $(document).ready(function () {
 
     }
 
-    /**
-     * Set the Cookie.
-     *
-     * @param cname
-     * @param cvalue
-     * @param exdays
-     */
+    // Set the cookie id
     function setCookie(cname, cvalue, exdays) {
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         var expires = "expires=" + d.toGMTString();
         document.cookie = cname + "=" + cvalue + "; " + expires;
     }
-
-    /**
-     * Get the Cookie from the a specif cookie name.
-     *
-     * @param cname
-     * @returns {string}
-     */
+    //Get the Cookie from the a specif cookie name.
     function getCookie(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
@@ -495,28 +373,11 @@ Display code
      * Update Display with Player info.
      *
      */
-    function updateDisplay(){
-        $("#playerName").empty().append("Player: " + gameParams.userName);
-        $("#wins").empty().append(gameParams.wins);
-        $("#losses").empty().append(gameParams.losses);
-        $("#ties").empty().append(gameParams.stalemates);
-
-    }
-
     //Helper Functions
-    function selectionSetup(selection) { return function () {  showSelection(selection);} }
-
-    function showSelection(selection) { $(selection).toggleClass("selecting"); }
-
 
     /**
      * Update the Board based on Board passed and if the board open squares should be activated for user.
-     *
      * The Scores uses the Global SCORES... Var to show or not show the scores.
-     *
-     * @param board
-     * @param activate
-     * @param scores
      */
     function updateBoard(board, activate,scores) {
 
@@ -535,7 +396,7 @@ Display code
                         $(cellindex).bind('mouseenter mouseleave', selectionSetup(cellindex));
                     }
 
-                    $(cellindex).bind('click', playSetup(r, c));
+                    $(cellindex).bind('click', playSetup(socket, gameId, clientId,r, c));
 
                 } else if (board[r][c] == 0 && !activate) {
                     $(cellindex).empty();

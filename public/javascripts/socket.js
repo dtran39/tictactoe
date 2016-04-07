@@ -66,7 +66,7 @@ function requestComputerGame(playerList, gameRegistrar, io) {
 function requestSimulation(gameRegistrar,playerList, io){
     return function(data){
         //Create Computer Player
-        var aiPlayer = new Player(data.requestID+"_AI","Computer",0,0,0,"playing",true);
+        var aiPlayer = new Player(data.requestID + "_AI","Computer",0,0,0,"playing",true);
         //Create a New Game for Request
         getPlayer(playerList, data.requestID).computerai=true;
         var players = {

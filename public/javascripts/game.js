@@ -13,7 +13,7 @@ function Game(height, width, playerList,id) {
 
     //Main Vars
     var GAME_CONNECTOR = "___";
-    this.id= id != null ? id:this.playerX.id + GAME_CONNECTOR + this.playerO.id;
+    this.id = id != null ? id :this.playerX.id + GAME_CONNECTOR + this.playerO.id;
 
     var board = new Array(height); for (var i = 0; i < height; i++) board[i] = new Array(width).fill(0);
     this.board = board.slice(0);
@@ -33,7 +33,7 @@ Game.prototype.startGame = function(io){
     io.in(this.playerO.id).emit('game_message',{message:"Game Started, Other Player Thinking"});
 }
 
-Game.prototype.endGame = function(io, gameRegistrar) {
+Game.prototype.endGame = function(io, gameList) {
     this.players.forEach(function(player) {
         if (!player.computerai) {
             player.state="new";
@@ -41,13 +41,13 @@ Game.prototype.endGame = function(io, gameRegistrar) {
         }
     });
 
-    this.cleanGame(gameRegistrar);
+    this.cleanGame(gameList);
 }
-
-Game.prototype.cleanGame = function(gameRegistrar){
-    for (var i=0;i<gameRegistrar.length;i++) {
-        if (gameRegistrar[i].gameId==this.gameId){
-            gameRegistrar.splice(i,1);
+// Remove this game from game list
+Game.prototype.cleanGame = function(gameList){
+    for (var i = 0;i<gameList.length;i++) {
+        if (gameList[i].gameId==this.gameId){
+            gameList.splice(i,1);
             break;
         }
     }
