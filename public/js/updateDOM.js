@@ -15,7 +15,8 @@ function createNewBoardOnDOM(board, boardHeight, boardWidth) {
     $('#mainBoard').css({'height': boardHeight + 'px', 'width': boardWidth + 'px'});
     $('td').css({'height': cellHeight + 'px', 'width': cellWidth + 'px', 'font-size': fontSize + 'px'});
 }
-//
+//Update Display with Player info.
+
 function updateDisplay(){
     $("#playerName").empty().append("Player: " + gameParams.userName);
     $("#wins").empty().append(gameParams.wins);

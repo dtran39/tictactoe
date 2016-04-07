@@ -24,7 +24,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 http = http.createServer(app);
 // module and methods
-var socketModule = require("./public/javascripts/socket.js");
+var socketModule = require("./app/socket.js");
 // Global vars
 var io = require('socket.io')(http);
 var gameRegistrar=new Array(), playerList = new Array();

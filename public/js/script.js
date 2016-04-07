@@ -185,14 +185,7 @@ $(document).ready(function () {
             );
         }
     });
-
-
-    /**
-     * Log Event for Console and log view.
-     *
-     * @param event
-     * @param display
-     */
+    //Log Event for Console and log view.
     function logEvent(event,display) {
         $('#archiveMessages').append("</br>").append(event);
         if (display) {
@@ -357,8 +350,8 @@ Display code
      * @param player
      */
     function addOpenGame(player) {
-
-        $("#player_" + player.id).empty().append('Game Open: ' + player.playerName + ' | <button id="' + player.id + '">Request Game</button>');
+        $("#player_" + player.id).empty()
+            .append('Game Open: ' + player.playerName + ' | <button id="' + player.id + '">Request Game</button>');
         $('#' + player.id).bind('click', function () {
             var startDetails = {
                 requestID: clientId,
@@ -369,10 +362,6 @@ Display code
             socket.emit('requestGame', startDetails);
         });
     }
-    /**
-     * Update Display with Player info.
-     *
-     */
     //Helper Functions
 
     /**
@@ -387,7 +376,6 @@ Display code
             for (var c = 0; c < numCol; ++c) {
                 var cellindex = "#cell" + r + "_" + c;
                 if (board[r][c] == 0 && activate) {
-
                     $(cellindex).empty();
                     if (SHOW_SCORES) {
                         $(cellindex).append("<span class='scoreText'>"+newScores[r][c]+"/" +scores[r][c] + "</span>");
