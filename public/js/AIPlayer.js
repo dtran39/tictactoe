@@ -67,4 +67,3 @@ function score(adj,end,player_id){
     if (adj==0&&end==player_id) return 20;
     return 0;
 }
-module.exports.scoreBoard = scoreBoard;
