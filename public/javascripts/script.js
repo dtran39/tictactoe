@@ -26,7 +26,6 @@ $(document).ready(function () {
         console.log("ID Assigned - " + clientId);
 
     });
-
     /**
      * Starts the game initializes the board and view by showing the grid, if necessary.
      *
@@ -34,7 +33,18 @@ $(document).ready(function () {
      */
     socket.on('begin_game', function (game) {
         gameId = game.id;
-
+        // Prepare the board
+        var board = game.board, height = board.length, width = board[0].length;
+        $('#mainBoard').empty();
+        for (var r = 0; r < height; r++) {
+                $tr = $('<tr>');
+                for (var c = 0; c < width; c++) {
+                    $cell = $('<td>');
+                    $cell.attr("id","cell" + r + "_" + c);
+                    $tr.append($cell);
+                }
+            $("#mainBoard").append($tr);            
+        }
         if (game.currentPlayer.id == clientId)
             updateBoard(game.board, true,game.aiscore);
         else

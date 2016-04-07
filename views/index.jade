@@ -36,12 +36,6 @@ block content
       div.gameViewBox
         div.tictacbox
           table(id="mainBoard")
-            - for (var r = 0; r < 4; r++) {
-              tr
-              - for (var c = 0; c < 4; c++) {
-                  td(id="cell" + r + "_" + c)
-              - }
-            - }        
       div.menu
         div.gameList
             ul(id='availGames').gameText
